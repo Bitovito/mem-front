@@ -76,18 +76,36 @@ const ChatUI = () => {
       const newMessage = { id: Date.now(), text: inputMessage, sender: "user" };
       setMessages([...messages, newMessage]);
       setInputMessage("");
-      // Simulate received message
-      setTimeout(() => {
-        const receivedMessage = { id: Date.now() + 1, text: "Thanks for your message!", sender: "other" };
-        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-      }, 1000);
+      //
+      fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: inputMessage })
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        if(!data.ok){
+          //Handle backend error msg
+          throw new Error('Error from backend: '+data);
+        }
+        console.log(data.answer);
+        setMessages((prevMessages) => [...prevMessages, { id: Date.now(), text: data.answer, sender: "assistant"}]);
+      })
+      .catch((error) => console.log(error));
+      //
+      // setTimeout(() => {
+      //   const receivedMessage = { id: Date.now() + 1, text: "Thanks for your message!", sender: "other" };
+      //   setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+      // }, 1000);
     }
   };
 
   const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
       handleSendMessage();
     }
+    
   };
 
   useEffect(() => {
