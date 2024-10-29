@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Button from '@mui/material/Button';
 import axios from "axios"
 import './App.css'
-import { TextField, Divider, Paper, Stack, Box } from "@mui/material";
+import { TextField, Divider, Paper, Stack, Box, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import ChatUI from "../components/ChatUI";
 
@@ -45,7 +45,13 @@ function App() {
   return (
     <Grid container sx={{flexGrow: 1, height: "100%"}}>
       <Grid size={3}>
-        <Box sx={{bgcolor: "#76578c" , height:"100%"}} id="caja"></Box>
+        <Box sx={{bgcolor: "#76578c" , height:"100%"}} id="caja">
+          <Box sx={{p: 1}}>
+            <Typography variant="h5" align="center" color="white">
+              Agente Asistente para VO
+            </Typography>
+          </Box>
+        </Box>
       </Grid>
       <Grid size={9}>
         <ChatUI />

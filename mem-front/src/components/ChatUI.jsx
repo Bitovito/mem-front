@@ -34,19 +34,41 @@ const ConversationContainer = styled(Paper)(({ theme }) => ({
 }));
 
 const MessageBubble = styled(Box)(({ theme, sender }) => ({
-  maxWidth: "70%",
+  maxWidth: sender === "user" ? "70%" : "100%",
   padding: theme.spacing(1, 2),
   borderRadius: "20px",
   marginBottom: theme.spacing(1),
-  backgroundColor: sender === "user" ? theme.palette.primary.light : theme.palette.grey[300],
+  backgroundColor: sender === "user" ? theme.palette.primary.light : '#fefcff',
   color: sender === "user" ? theme.palette.primary.contrastText : theme.palette.text.primary,
   alignSelf: sender === "user" ? "flex-end" : "flex-start",
-  boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "scale(1.02)",
-  },
+  // boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+  // transition: "all 0.3s ease",
+  // "&:hover": {
+  //   transform: "scale(1.02)",
+  // },
 }));
+
+function MessageRender({sender, text}) {
+  if (sender != "user" && text.includes('https')){
+    console.log(text.split('$'));
+    var imageUrl = text.split('$')[1]
+    return(
+      <>
+        <MessageBubble sender={sender}>
+          <ListItemText primary={text} />
+        </MessageBubble>
+        <MessageBubble>
+          <img src={imageUrl} alt="My Image" />
+        </MessageBubble>
+      </>
+    )
+  }
+  return(
+    <MessageBubble sender={sender}>
+      <ListItemText primary={text} />
+    </MessageBubble>
+  )
+}
 
 const InputContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -77,7 +99,7 @@ const ChatUI = () => {
       setMessages([...messages, newMessage]);
       setInputMessage("");
       //
-      fetch("http://localhost:8000/chat", {
+      fetch("http://localhost:8000/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: inputMessage })
@@ -88,7 +110,6 @@ const ChatUI = () => {
           //Handle backend error msg
           throw new Error('Error from backend: '+data);
         }
-        console.log(data.answer);
         setMessages((prevMessages) => [...prevMessages, { id: Date.now(), text: data.answer, sender: "assistant"}]);
       })
       .catch((error) => console.log(error));
@@ -122,9 +143,10 @@ const ChatUI = () => {
         <List>
           {messages.map((message) => (
             <ListItem key={message.id} sx={{ display: "flex", justifyContent: message.sender === "user" ? "flex-end" : "flex-start" }}>
-              <MessageBubble sender={message.sender}>
+              {/* <MessageBubble sender={message.sender}>
                 <ListItemText primary={message.text} />
-              </MessageBubble>
+              </MessageBubble> */}
+              <MessageRender sender={message.sender} text={message.text} />
             </ListItem>
           ))}
         </List>
