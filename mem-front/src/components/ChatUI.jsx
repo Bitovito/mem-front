@@ -49,7 +49,7 @@ const MessageBubble = styled(Box)(({ theme, sender }) => ({
 }));
 
 function MessageRender({sender, text}) {
-  if (sender != "user" && text.includes('https')){
+  if (sender != "user" && (text.includes('image')|| text.includes('Image')) && text.includes('$https')){
     console.log(text.split('$'));
     var imageUrl = text.split('$')[1]
     return(
