@@ -11,6 +11,8 @@ import {
   ListItemText,
   Paper,
   Snackbar,
+  TableContainer,
+  Table, TableHead, TableBody, TableRow, TableCell
 } from "@mui/material";
 import { styled } from "@mui/material";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
@@ -49,8 +51,9 @@ const MessageBubble = styled(Box)(({ theme, sender }) => ({
 }));
 
 function MessageRender({sender, text}) {
-  if (sender != "user" && (text.includes('image')|| text.includes('Image')) && text.includes('$https')){
+  if (sender != "user" && (text.last_message.includes('image')|| text.last_message.includes('Image')) && text.last_message.includes('$https')){
     console.log(text.split('$'));
+
     var imageUrl = text.split('$')[1]
     return(
       <>
@@ -63,9 +66,48 @@ function MessageRender({sender, text}) {
       </>
     )
   }
+  else if (sender != "user" && 'final_response' in text && 'data_table' in text.final_response){
+    console.log("Respuesta con data_table");
+    console.log(text.final_response.data_table);
+    
+    return(
+      <>
+        <MessageBubble sender={sender}>
+          <ListItemText primary={text.final_response.text_answer} />
+        </MessageBubble>
+        <MessageBubble>
+          {/* data_table */}
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {Object.keys(text.final_response.data_table).map((key) => {
+                      <TableCell>{key}</TableCell>
+                    })}
+                  </TableRow>
+                </TableHead>
+                <TableBody>{
+                  text.final_response.data_table.map((row) => {
+                    <TableRow
+                      ker={row.res_title}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      {row.map((attr) => {
+                        <TableCell>{attr}</TableCell>
+                      })}
+                    </TableRow>
+                    Object.values(row) 
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+        </MessageBubble>
+      </>
+    )
+  }
   return(
     <MessageBubble sender={sender}>
-      <ListItemText primary={text} />
+      <ListItemText primary={sender != 'user' ? text.last_message : text} />
     </MessageBubble>
   )
 }
