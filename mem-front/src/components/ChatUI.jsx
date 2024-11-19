@@ -50,64 +50,64 @@ const MessageBubble = styled(Box)(({ theme, sender }) => ({
   // },
 }));
 
-function MessageRender({sender, text}) {
-  if (sender != "user" && (text.last_message.includes('image')|| text.last_message.includes('Image')) && text.last_message.includes('$https')){
-    console.log(text.split('$'));
-
-    var imageUrl = text.split('$')[1]
-    return(
-      <>
-        <MessageBubble sender={sender}>
-          <ListItemText primary={text} />
-        </MessageBubble>
-        <MessageBubble>
-          <img src={imageUrl} alt="My Image" />
-        </MessageBubble>
-      </>
-    )
-  }
-  else if (sender != "user" && 'final_response' in text && 'data_table' in text.final_response){
-    console.log("Respuesta con data_table");
-    console.log(text.final_response.data_table);
-    
-    return(
-      <>
-        <MessageBubble sender={sender}>
-          <ListItemText primary={text.final_response.text_answer} />
-        </MessageBubble>
-        <MessageBubble>
-          {/* data_table */}
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {Object.keys(text.final_response.data_table).map((key) => {
-                      <TableCell>{key}</TableCell>
-                    })}
-                  </TableRow>
-                </TableHead>
-                <TableBody>{
-                  text.final_response.data_table.map((row) => {
-                    <TableRow
-                      ker={row.res_title}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      {row.map((attr) => {
-                        <TableCell>{attr}</TableCell>
-                      })}
+function MessageRender({sender, msg_data}) {
+  if (sender === "assistant"){
+    if ((msg_data.last_message.includes('image')|| msg_data.last_message.includes('Image')) && msg_data.last_message.includes('$https')){
+      console.log(msg_data.split('$'));
+  
+      var imageUrl = msg_data.split('$')[1]
+      return(
+        <>
+          <MessageBubble sender={sender}>
+            <ListItemText primary={msg_data} />
+          </MessageBubble>
+          <MessageBubble>
+            <img src={imageUrl} alt="My Image" />
+          </MessageBubble>
+        </>
+      )
+    }
+    else if ('final_response' in msg_data && 'data_table' in msg_data.final_response){
+      console.log("Respuesta con data_table");
+      console.log(msg_data.final_response.data_table);
+      
+      return(
+        <>
+          <MessageBubble sender={sender}>
+            <ListItemText primary={msg_data.final_response.text_message} />
+          </MessageBubble>
+          <MessageBubble>
+            {/* data_table */}
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {Object.keys(msg_data.final_response.data_table[0]).map((key) => <TableCell>{key}</TableCell>)}
                     </TableRow>
-                    Object.values(row) 
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
-        </MessageBubble>
-      </>
-    )
+                  </TableHead>
+                  <TableBody>{
+                    msg_data.final_response.data_table.map((row) => {
+                      console.log(row);
+                      return(  
+                        <TableRow
+                          ker={row.res_title}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          {Object.keys(row).map((key) => <TableCell>{row[key]}</TableCell>)}
+                        </TableRow>
+                      )
+                    })
+                  }</TableBody>
+                </Table>
+              </TableContainer>
+          </MessageBubble>
+        </>
+      )
+    }
   }
   return(
     <MessageBubble sender={sender}>
-      <ListItemText primary={sender != 'user' ? text.last_message : text} />
+      <ListItemText primary={sender != 'user' ? msg_data.last_message : msg_data} />
     </MessageBubble>
   )
 }
@@ -137,27 +137,27 @@ const ChatUI = () => {
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
-      const newMessage = { id: Date.now(), text: inputMessage, sender: "user" };
+      const newMessage = { id: Date.now(), msg_data: inputMessage, sender: "user" };
       setMessages([...messages, newMessage]);
       setInputMessage("");
       //
       fetch("http://localhost:8000/agent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: inputMessage })
+        body: JSON.stringify({ msg_data: inputMessage })
       })
       .then((response) => response.json())
       .then((data) => {
-        if(!data.ok){
+        if(data.status === "error"){
           //Handle backend error msg
           throw new Error('Error from backend: '+data);
         }
-        setMessages((prevMessages) => [...prevMessages, { id: Date.now(), text: data.answer, sender: "assistant"}]);
+        setMessages((prevMessages) => [...prevMessages, { id: Date.now(), msg_data: data.answer, sender: "assistant"}]);
       })
       .catch((error) => console.log(error));
       //
       // setTimeout(() => {
-      //   const receivedMessage = { id: Date.now() + 1, text: "Thanks for your message!", sender: "other" };
+      //   const receivedMessage = { id: Date.now() + 1, msg_data: "Thanks for your message!", sender: "other" };
       //   setMessages((prevMessages) => [...prevMessages, receivedMessage]);
       // }, 1000);
     }
@@ -186,9 +186,9 @@ const ChatUI = () => {
           {messages.map((message) => (
             <ListItem key={message.id} sx={{ display: "flex", justifyContent: message.sender === "user" ? "flex-end" : "flex-start" }}>
               {/* <MessageBubble sender={message.sender}>
-                <ListItemText primary={message.text} />
+                <ListItemText primary={message.msg_data} />
               </MessageBubble> */}
-              <MessageRender sender={message.sender} text={message.text} />
+              <MessageRender sender={message.sender} text={message.msg_data} />
             </ListItem>
           ))}
         </List>
