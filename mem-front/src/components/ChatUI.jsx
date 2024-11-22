@@ -115,7 +115,7 @@ function MessageRender({sender, text}) {
 const InputContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   padding: theme.spacing(2),
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.primary.main,
   minHeight: "3rem",
   height: "auto",
 }));
@@ -123,6 +123,7 @@ const InputContainer = styled(Box)(({ theme }) => ({
 const SendButton = styled(IconButton)(({ theme }) => ({
   width: "3rem",
   height: "3rem",
+  color: theme.palette.primary.contrastText,
   marginLeft: theme.spacing(1),
   transition: "all 0.3s ease",
   "&:active": {
@@ -215,7 +216,6 @@ const ChatUI = () => {
           }}
         />
         <SendButton
-          color="primary"
           onClick={handleSendMessage}
           aria-label="Send Message"
         >
