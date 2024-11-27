@@ -9,25 +9,36 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark',
     primary: {
-      main: '#13576e',
-      contrastText: '#f1ecec'
+      main: '#00838f',
     },
     secondary: {
-      main: '#571c56',
+      main: '#ad1457',
     },
     background: {
-      default: '#000f2b',
-      paper: '#f1d1b0',
+      default: '#04041e',
+      paper: '#04041e',
     },
-    text: {
-      primary: '#000000',
+    error: {
+      main: '#d50000',
     },
-    divider: '#f3e8d5',
+    warning: {
+      main: '#ff6d00',
+    },
+    info: {
+      main: '#4fc3f7',
+    },
+    success: {
+      main: '#4caf50',
+    },
+    divider: 'rgba(189,189,189,0.28)',
   },
   typography: {
     fontFamily: 'Raleway',
+  },
+  shape: {
+    borderRadius: 0,
   },
 })
 
@@ -36,8 +47,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Grid container sx={{flexGrow: 1, height: "100%"}}>
-        <Grid size={3}>
-          <Box sx={{bgcolor: "#76578c" , height:"100%"}} id="caja">
+        <Grid size={2}>
+          <Box sx={{bgcolor: theme.palette.primary.main , height:"100%"}} id="caja">
             <Box sx={{p: 1}}>
               <Typography variant="h5" align="center" color="white">
                 Agentic Assistant for the Virtual Observatory
@@ -45,7 +56,7 @@ function App() {
             </Box>
           </Box>
         </Grid>
-        <Grid size={9}>
+        <Grid size={10}>
           <ChatUI />
         </Grid>
       </Grid>

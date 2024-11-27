@@ -17,6 +17,8 @@ import {
 import { styled } from "@mui/material";
 import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
+import VoDataTable from "./VoDataTable.jsx";
+import testingData from "../assets/testingData.json"
 
 const ChatContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -40,7 +42,7 @@ const MessageBubble = styled(Box)(({ theme, sender }) => ({
   padding: theme.spacing(1, 2),
   borderRadius: "20px",
   marginBottom: theme.spacing(1),
-  backgroundColor: sender === "user" ? theme.palette.primary.light : '#fefcff',
+  backgroundColor: sender === "user" ? theme.palette.primary.light : theme.palette.background.paper,
   color: sender === "user" ? theme.palette.primary.contrastText : theme.palette.text.primary,
   alignSelf: sender === "user" ? "flex-end" : "flex-start",
   // boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
@@ -50,64 +52,62 @@ const MessageBubble = styled(Box)(({ theme, sender }) => ({
   // },
 }));
 
-function MessageRender({sender, msg_data}) {
-  if (sender === "assistant"){
-    if ((msg_data.last_message.includes('image')|| msg_data.last_message.includes('Image')) && msg_data.last_message.includes('$https')){
-      console.log(msg_data.split('$'));
+function MessageDataRender(mesg_data){
+  const msg_data = mesg_data.msg_data
   
-      var imageUrl = msg_data.split('$')[1]
-      return(
-        <>
-          <MessageBubble sender={sender}>
-            <ListItemText primary={msg_data} />
-          </MessageBubble>
-          <MessageBubble>
-            <img src={imageUrl} alt="My Image" />
-          </MessageBubble>
-        </>
-      )
-    }
-    else if ('final_response' in msg_data && 'data_table' in msg_data.final_response){
+  switch(msg_data.last_tool_called) {
+    case "RegistryResponse":
       console.log("Respuesta con data_table");
       console.log(msg_data.final_response.data_table);
-      
       return(
-        <>
-          <MessageBubble sender={sender}>
-            <ListItemText primary={msg_data.final_response.text_message} />
-          </MessageBubble>
-          <MessageBubble>
-            {/* data_table */}
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      {Object.keys(msg_data.final_response.data_table[0]).map((key) => <TableCell>{key}</TableCell>)}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>{
-                    msg_data.final_response.data_table.map((row) => {
-                      console.log(row);
-                      return(  
-                        <TableRow
-                          ker={row.res_title}
-                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                          {Object.keys(row).map((key) => <TableCell>{row[key]}</TableCell>)}
-                        </TableRow>
-                      )
-                    })
-                  }</TableBody>
-                </Table>
-              </TableContainer>
-          </MessageBubble>
-        </>
+        <VoDataTable table_obj={msg_data.final_response.data_table} />
       )
-    }
+      // return(
+      //   <MessageBubble>
+      //     {/* data_table */}
+      //       <TableContainer>
+      //         <Table>
+      //           <TableHead>
+      //             <TableRow>
+      //               {Object.keys(msg_data.final_response.data_table[0]).map((key) => <TableCell>{key}</TableCell>)}
+      //             </TableRow>
+      //           </TableHead>
+      //           <TableBody>{
+      //             msg_data.final_response.data_table.map((row) => {
+      //               console.log(row);
+      //               return(  
+      //                 <TableRow
+      //                   ker={row.res_title}
+      //                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+      //                 >
+      //                   {Object.keys(row).map((key) => <TableCell>{row[key]}</TableCell>)}
+      //                 </TableRow>
+      //               )
+      //             })
+      //           }</TableBody>
+      //         </Table>
+      //       </TableContainer>
+      //   </MessageBubble>
+      // )
+    case "ImageResponse":
+      console.log("Respuesta con imagen");
+      console.log(msg_data.final_response.vo_image);
+      return(
+        <MessageBubble>
+          <img src={msg_data.msg_data.final_response.vo_image.link} alt={msg_data.msg_data.final_response.vo_image.title} />
+        </MessageBubble>
+      )
+  }
+}
+
+function MessageRender({sender, msg_data}) {
+  var text = msg_data
+  if (sender === "assistant"){
+    text = "final_response" in msg_data ? msg_data.final_response.text_answer : msg_data.last_message
   }
   return(
     <MessageBubble sender={sender}>
-      <ListItemText primary={sender != 'user' ? msg_data.last_message : msg_data} />
+      <ListItemText primary={text} />
     </MessageBubble>
   )
 }
@@ -115,7 +115,7 @@ function MessageRender({sender, msg_data}) {
 const InputContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   padding: theme.spacing(2),
-  backgroundColor: theme.palette.primary.main,
+  backgroundColor: theme.palette.background.paper,
   minHeight: "3rem",
   height: "auto",
 }));
@@ -132,13 +132,14 @@ const SendButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const ChatUI = () => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(testingData);
   const [inputMessage, setInputMessage] = useState("");
   const [error, setError] = useState(null);
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
       const newMessage = { id: Date.now(), msg_data: inputMessage, sender: "user" };
+      console.log(newMessage);
       setMessages([...messages, newMessage]);
       setInputMessage("");
       //
@@ -150,10 +151,11 @@ const ChatUI = () => {
       .then((response) => response.json())
       .then((data) => {
         if(data.status === "error"){
-          //Handle backend error msg
-          throw new Error('Error from backend: '+data);
+          throw new Error('Error from backend: ' + data.answer);
         }
-        setMessages((prevMessages) => [...prevMessages, { id: Date.now(), msg_data: data.answer, sender: "assistant"}]);
+        const newAIMessage = { id: Date.now(), msg_data: data.answer, sender: "assistant"}
+        console.log(newAIMessage);
+        setMessages((prevMessages) => [...prevMessages, newAIMessage]);
       })
       .catch((error) => console.log(error));
       //
@@ -185,12 +187,16 @@ const ChatUI = () => {
       <ConversationContainer id="conversation-container">
         <List>
           {messages.map((message) => (
+            <>
             <ListItem key={message.id} sx={{ display: "flex", justifyContent: message.sender === "user" ? "flex-end" : "flex-start" }}>
-              {/* <MessageBubble sender={message.sender}>
-                <ListItemText primary={message.msg_data} />
-              </MessageBubble> */}
-              <MessageRender sender={message.sender} text={message.msg_data} />
+              <MessageRender sender={message.sender} msg_data={message.msg_data} />
             </ListItem>
+            {message.sender != "user" && "final_response" in message.msg_data &&
+              (<ListItem key={message.id+"_"} sx={{ display: "flex", justifyContent: "flex-start" }}>
+                <MessageDataRender msg_data={message.msg_data} />
+              </ListItem>)
+            }
+            </>
           ))}
         </List>
       </ConversationContainer>

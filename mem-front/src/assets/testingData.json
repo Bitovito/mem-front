@@ -1,0 +1,113 @@
+[
+  { 
+    "id": 1732627805977, 
+    "msg_data": "Hi", 
+    "sender": "user" 
+  },
+  { 
+    "id": 1732627807483, 
+    "msg_data": 
+    { 
+      "last_message": "Hello! How can I assist you today with your astronomy inquiries?" 
+    }, 
+    "sender": "assistant" 
+  },
+  { 
+    "id": 1732627840225, 
+    "msg_data": "I need data related to Jupiter, in te UV waveband", 
+    "sender": "user" 
+  },
+  { 
+    "id": 1732627865760, 
+    "msg_data": 
+    { 
+      "last_tool_called": "RegistryResponse", 
+      "last_message": "", 
+      "final_response": 
+      { 
+        "text_answer": "I have found 8 resources related to Jupiter in the UV waveband.", 
+        "data_table": 
+        [
+          { 
+            "id": 1,
+            "res_title": "XMM-OM Serendipitous Source Survey Catalogue (XMM-SUSS5.0)", 
+            "res_description": "SUSS5.0 is a new 2020 release of the XMM OM Serendipitous Ultraviolet Source Survey catalogue. This release is largely an increment of the previous XMM-OM-SUSS4.1 release but includes flagging of sources affected by a patch of reduced sensitivity near the centre of the OM field of view.", 
+            "content_level": "research", 
+            "access_modes": [ "tap#aux", "web", "conesearch" ],
+            "access_urls": "http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/conesearch/II/370/xmmom5s?:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/votable?-source=II/370:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=II/370",
+            "created": "2021-10-20T08:04:27",
+            "updated": "2023-11-07T00:00:00",
+            "waveband": "x-ray#uv"
+          },
+          {
+            "access_modes": [ "tap#aux", "web" ],
+            "access_urls": "http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/votable?-source=J/A+A/623/A57:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=J/A+A/623/A57",
+            "content_level": "research",
+            "created": "2019-03-06T07:07:44",
+            "id": 2,
+            "res_description": "Close-in gas planets are subject to continuous photoevaporation that can erode their volatile envelopes. Today, ongoing mass loss has been confirmed in a few individual systems via transit observations in the ultraviolet spectral range.",
+            "res_title": "WASP-121 b Swift UVOT near-UV transit observations",
+            "updated": "2022-11-04T00:00:00",
+            "waveband": "uv"
+          },
+          {
+            "access_modes": [ "tap#aux", "web" ],
+            "access_urls": "http://vizier.cds.unistra.fr/viz-bin/votable?-source=J/AJ/159/204:::py VO sep:::http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=J/AJ/159/204",
+            "content_level": "research",
+            "created": "2020-10-08T13:17:02",
+            "id": 3,
+            "res_description": "The ultraviolet-visible wavelength range holds critical spectral diagnostics for the chemistry and physics at work in planetary atmospheres. Here for the first time, we apply the Hubble WFC3/UVIS G280 grism mode to obtain exoplanet spectroscopy from 200 to 800nm in a single observation.",
+            "res_title": "HAT-P-41b transmission spectra with HST WFC3/UVIS",
+            "updated": "2022-10-18T00:00:00",
+            "waveband": "uv#optical"
+          },
+          {
+            "access_modes": [ "tap#aux", "web" ],
+            "access_urls": "http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/votable?-source=J/AJ/161/51:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=J/AJ/161/51",
+            "content_level": "research",
+            "created": "2021-04-07T08:34:24",
+            "id": 4,
+            "res_description": "We present a comprehensive analysis of the 0.3-5{mu}m transit spectrum for the inflated hot Jupiter HAT-P-41b. The planet was observed in transit with Hubble STIS and WFC3 as part of the Hubble Panchromatic Comparative Exoplanet Treasury (PanCET) program.",
+            "res_title": "HST spectral light curve of HAT-P-41",
+            "updated": "2022-10-18T00:00:00",
+            "waveband": "uv#optical#infrared"
+          },
+          {
+            "access_modes": [ "tap#aux", "web" ],
+            "access_urls": "http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/votable?-source=J/ApJ/896/24:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=J/ApJ/896/24",
+            "content_level": "research",
+            "created": "2021-11-04T15:00:51",
+            "id": 5,
+            "res_description": "We measured 304 absorption features in the ultraviolet and visible spectra of the star 51 Oph, which is known to have a debris disk with a high inclination.",
+            "res_title": "Properties of atomic lines in 51 Oph UV spectra",
+            "updated": "2022-10-24T00:00:00",
+            "waveband": "uv#optical"
+          },
+          {
+            "access_modes": [ "tap#aux", "web", "conesearch" ],
+            "access_urls": "http://vizier.cds.unistra.fr/viz-bin/conesearch/J/ApJS/211/9/table1?:::py VO sep:::http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/votable?-source=J/ApJS/211/9:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=J/ApJS/211/9",
+            "content_level": "research",
+            "created": "2014-04-16T14:22:56",
+            "id": 6,
+            "res_description": "Variations in stellar flux can potentially overwhelm the photometric signal of a transiting planet. This variability has not previously been well-characterized in the ultraviolet lines used to probe the inflated atmospheres surrounding hot Jupiters.",
+            "res_title": "Variability in UV line emission of F-M stars",
+            "updated": "2022-10-24T00:00:00",
+            "waveband": "uv"
+          },
+          {
+            "access_modes": [ "tap#aux", "web" ],
+            "access_urls": "http://tapvizier.cds.unistra.fr/TAPVizieR/tap:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/votable?-source=J/MNRAS/446/2337:::py VO sep:::http://vizier.cds.unistra.fr/viz-bin/VizieR-2?-source=J/MNRAS/446/2337",
+            "content_level": "research",
+            "created": "2014-12-01T14:34:55",
+            "id": 7,
+            "res_description": "A comprehensive hot line list is calculated for ^31^PH_3_ in its ground electronic state. This line list, called SAlTY, contains almost 16.8 billion transitions between 7.5 million energy levels and it is suitable for simulating spectra up to temperatures of 1500K.",
+            "res_title": "ExoMol line lists for phosphine (PH_3_)",
+            "updated": "2024-08-14T20:18:50",
+            "waveband": "uv#infrared" 
+          }
+        ] 
+      } 
+    }, 
+    "sender": "assistant" 
+  }
+]
