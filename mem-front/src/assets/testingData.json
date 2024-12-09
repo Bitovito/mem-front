@@ -21,12 +21,9 @@
     "id": 1732627865760, 
     "msg_data": 
     { 
-      "last_tool_called": "RegistryResponse", 
-      "last_message": "", 
-      "final_response": 
-      { 
-        "text_answer": "I have found 8 resources related to Jupiter in the UV waveband.", 
-        "data_table": 
+      "last_tool_called": "get_registry", 
+      "last_message": "I have found 8 resources related to Jupiter in the UV waveband.", 
+      "tool_data": 
         [
           { 
             "id": 1,
@@ -105,8 +102,37 @@
             "updated": "2024-08-14T20:18:50",
             "waveband": "uv#infrared" 
           }
-        ] 
-      } 
+        ]
+    }, 
+    "sender": "assistant" 
+  },
+  {
+    "id": 1733156028764, 
+    "msg_data": 
+    { 
+      "last_tool_called": "sia_query", 
+      "last_message": "Here is an image of Eta Carinae:", 
+      "tool_data": 
+      {
+        "filesize": null, 
+        "format": "image/jpeg", 
+        "link": "https://hla.stsci.edu/cgi-bin/fitscut.cgi?red=hlsp_appp_hst_wfpc2_ffd-pu581eo01_f300w_v2_sci&amp;size=ALL&amp;format=jpeg&amp;config=ops&amp;asinh=1&amp;autoscale=99.50&amp;qext=4",
+        "title": "appp_hst_wfpc2_ffd-pu581eo01 WFPC2 F300W (hlsp) APPP"
+        
+      }
+    },
+    "sender": "assistant"
+  },
+  { 
+    "id": 1733156122246, 
+    "msg_data": "Amazing!", 
+    "sender": "user" 
+  },
+  { 
+    "id": 1732627807483, 
+    "msg_data": 
+    { 
+      "last_message": "I'm glad you think so! If you have any more questions or need further assistance, feel free to ask." 
     }, 
     "sender": "assistant" 
   }

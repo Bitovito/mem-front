@@ -15,6 +15,14 @@ const columns = [
   {field: 'access_modes', headerName: 'Access Modes'},
 ]
 
+function getCols(raw_cols){
+  const columns = raw_cols.map((col) => {
+    let cap_col = String(col).charAt(0).toUpperCase() + String(col).slice(1);
+    return {field: String(col), headerName: cap_col.replace("_"," ")}
+  })
+  return columns;
+}
+
 const paginationModel = { page: 0, pageSize: 3 };
 
 function VoDataTable(table_obj, height=400, width='100%', pageSize=[3,6]) {  
@@ -22,6 +30,7 @@ function VoDataTable(table_obj, height=400, width='100%', pageSize=[3,6]) {
   for (let i = 1; i <= data_table.length; i++){
     data_table[i-1].id = i;
   }
+  const columns = getCols(Object.keys(data_table[0]));
   return (
     <Paper sx={{ height: height, width: width }}>
       <DataGrid

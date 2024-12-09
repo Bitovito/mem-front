@@ -34,7 +34,7 @@ const ConversationContainer = styled(Paper)(({ theme }) => ({
   overflow: "auto",
   padding: theme.spacing(2),
   backgroundColor: theme.palette.background.default,
-  maxHeight:"fit-content"
+  maxHeight:"none"
 }));
 
 const MessageBubble = styled(Box)(({ theme, sender }) => ({
@@ -56,11 +56,16 @@ function MessageDataRender(mesg_data){
   const msg_data = mesg_data.msg_data
   
   switch(msg_data.last_tool_called) {
-    case "RegistryResponse":
-      console.log("Respuesta con data_table");
-      console.log(msg_data.final_response.data_table);
+    case "get_registry":
+      // fall through
+    case "query_ssa":
+      // fall through
+    case "query_scs":
+      // fall through
+    case "query_sla":
+      // fall through
       return(
-        <VoDataTable table_obj={msg_data.final_response.data_table} />
+        <VoDataTable table_obj={msg_data.tool_data} />
       )
       // return(
       //   <MessageBubble>
@@ -69,11 +74,11 @@ function MessageDataRender(mesg_data){
       //         <Table>
       //           <TableHead>
       //             <TableRow>
-      //               {Object.keys(msg_data.final_response.data_table[0]).map((key) => <TableCell>{key}</TableCell>)}
+      //               {Object.keys(msg_data.tool_data.data_table[0]).map((key) => <TableCell>{key}</TableCell>)}
       //             </TableRow>
       //           </TableHead>
       //           <TableBody>{
-      //             msg_data.final_response.data_table.map((row) => {
+      //             msg_data.tool_data.data_table.map((row) => {
       //               console.log(row);
       //               return(  
       //                 <TableRow
@@ -89,22 +94,31 @@ function MessageDataRender(mesg_data){
       //       </TableContainer>
       //   </MessageBubble>
       // )
-    case "ImageResponse":
-      console.log("Respuesta con imagen");
-      console.log(msg_data.final_response.vo_image);
+    case "sia_query":
+      // console.log("Respuesta con imagen");
+      // console.log(msg_data.tool_data.vo_image);
       return(
         <MessageBubble>
-          <img src={msg_data.msg_data.final_response.vo_image.link} alt={msg_data.msg_data.final_response.vo_image.title} />
+          <Box 
+            component="img"
+            sx={{
+              height: 600,
+              width: 600,
+              maxHeight: 600,
+              maxWidth: 600,
+            }}
+            alt={msg_data.tool_data.title}
+            src={msg_data.tool_data.link}
+          />
+          {/* <img src={msg_data.tool_data.vo_image.link} alt={msg_data.tool_data.vo_image.title} /> */}
         </MessageBubble>
       )
   }
 }
 
 function MessageRender({sender, msg_data}) {
-  var text = msg_data
-  if (sender === "assistant"){
-    text = "final_response" in msg_data ? msg_data.final_response.text_answer : msg_data.last_message
-  }
+  var text = sender === "user" ? msg_data : msg_data.last_message
+  console.log(text);
   return(
     <MessageBubble sender={sender}>
       <ListItemText primary={text} />
@@ -158,11 +172,6 @@ const ChatUI = () => {
         setMessages((prevMessages) => [...prevMessages, newAIMessage]);
       })
       .catch((error) => console.log(error));
-      //
-      // setTimeout(() => {
-      //   const receivedMessage = { id: Date.now() + 1, msg_data: "Thanks for your message!", sender: "other" };
-      //   setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-      // }, 1000);
     }
   };
 
@@ -182,16 +191,21 @@ const ChatUI = () => {
     }
   }, [messages]);
 
+  // function logMsgs() {
+  //   console.log(messages);
+  // }
+
   return (
     <ChatContainer>
       <ConversationContainer id="conversation-container">
+        {/* <Button onClick={logMsgs}>Log Messages</Button> */}
         <List>
           {messages.map((message) => (
             <>
             <ListItem key={message.id} sx={{ display: "flex", justifyContent: message.sender === "user" ? "flex-end" : "flex-start" }}>
               <MessageRender sender={message.sender} msg_data={message.msg_data} />
             </ListItem>
-            {message.sender != "user" && "final_response" in message.msg_data &&
+            {message.sender != "user" && "tool_data" in message.msg_data &&
               (<ListItem key={message.id+"_"} sx={{ display: "flex", justifyContent: "flex-start" }}>
                 <MessageDataRender msg_data={message.msg_data} />
               </ListItem>)
