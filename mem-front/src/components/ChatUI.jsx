@@ -118,7 +118,7 @@ function MessageDataRender(mesg_data){
 
 function MessageRender({sender, msg_data}) {
   var text = sender === "user" ? msg_data : msg_data.last_message
-  console.log(text);
+  
   return(
     <MessageBubble sender={sender}>
       <ListItemText primary={text} />
@@ -205,7 +205,7 @@ const ChatUI = () => {
             <ListItem key={message.id} sx={{ display: "flex", justifyContent: message.sender === "user" ? "flex-end" : "flex-start" }}>
               <MessageRender sender={message.sender} msg_data={message.msg_data} />
             </ListItem>
-            {message.sender != "user" && "tool_data" in message.msg_data &&
+            {message.sender != "user" && message.msg_data.tool_data &&
               (<ListItem key={message.id+"_"} sx={{ display: "flex", justifyContent: "flex-start" }}>
                 <MessageDataRender msg_data={message.msg_data} />
               </ListItem>)
