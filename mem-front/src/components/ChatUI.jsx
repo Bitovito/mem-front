@@ -19,6 +19,8 @@ import { TextareaAutosize } from '@mui/base/TextareaAutosize';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import VoDataTable from "./VoDataTable.jsx";
 import testingData from "../assets/testingData.json"
+import { MuiMarkdown } from 'mui-markdown';
+import buffer from '../assets/loading-buffer-cropped.gif'
 
 const ChatContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -67,34 +69,7 @@ function MessageDataRender(mesg_data){
       return(
         <VoDataTable table_obj={msg_data.tool_data} />
       )
-      // return(
-      //   <MessageBubble>
-      //     {/* data_table */}
-      //       <TableContainer>
-      //         <Table>
-      //           <TableHead>
-      //             <TableRow>
-      //               {Object.keys(msg_data.tool_data.data_table[0]).map((key) => <TableCell>{key}</TableCell>)}
-      //             </TableRow>
-      //           </TableHead>
-      //           <TableBody>{
-      //             msg_data.tool_data.data_table.map((row) => {
-      //               console.log(row);
-      //               return(  
-      //                 <TableRow
-      //                   ker={row.res_title}
-      //                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-      //                 >
-      //                   {Object.keys(row).map((key) => <TableCell>{row[key]}</TableCell>)}
-      //                 </TableRow>
-      //               )
-      //             })
-      //           }</TableBody>
-      //         </Table>
-      //       </TableContainer>
-      //   </MessageBubble>
-      // )
-    case "sia_query":
+    case "query_sia":
       // console.log("Respuesta con imagen");
       // console.log(msg_data.tool_data.vo_image);
       return(
@@ -121,8 +96,24 @@ function MessageRender({sender, msg_data}) {
   
   return(
     <MessageBubble sender={sender}>
-      <ListItemText primary={text} />
+      <ListItemText primary={
+        <MuiMarkdown>{text}</MuiMarkdown>
+      }/>
     </MessageBubble>
+  )
+}
+
+function LoadingBuffer() {
+  return(
+    <Box 
+      component="img" 
+      src={buffer} 
+      sx={{
+        paddingY: 1,
+        paddingX: 3
+      }}
+      alt="loading-buffer" 
+    />
   )
 }
 
@@ -148,10 +139,13 @@ const SendButton = styled(IconButton)(({ theme }) => ({
 const ChatUI = () => {
   const [messages, setMessages] = useState(testingData);
   const [inputMessage, setInputMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSendMessage = () => {
     if (inputMessage.trim()) {
+      setLoading(true);
+
       const newMessage = { id: Date.now(), msg_data: inputMessage, sender: "user" };
       console.log(newMessage);
       setMessages([...messages, newMessage]);
@@ -171,7 +165,8 @@ const ChatUI = () => {
         console.log(newAIMessage);
         setMessages((prevMessages) => [...prevMessages, newAIMessage]);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.log(error))
+      .finally(() => setLoading(false));
     }
   };
 
@@ -213,6 +208,9 @@ const ChatUI = () => {
             </>
           ))}
         </List>
+        {loading && (
+          <LoadingBuffer />
+        )}
       </ConversationContainer>
 
       <InputContainer>
