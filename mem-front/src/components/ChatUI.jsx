@@ -60,6 +60,8 @@ function MessageDataRender(mesg_data){
   switch(msg_data.last_tool_called) {
     case "get_registry":
       // fall through
+    case "query_sia":
+      // fall through
     case "query_ssa":
       // fall through
     case "query_scs":
@@ -69,7 +71,7 @@ function MessageDataRender(mesg_data){
       return(
         <VoDataTable table_obj={msg_data.tool_data} />
       )
-    case "query_sia":
+    case "sia_img":
       // console.log("Respuesta con imagen");
       // console.log(msg_data.tool_data.vo_image);
       return(

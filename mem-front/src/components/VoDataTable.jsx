@@ -2,22 +2,30 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
+import { Link } from "@mui/material";
 
-const columns = [
-  {field: 'id', headerName: 'ID'},
-  {field: 'res_title', headerName: 'Title'},
-  {field: 'res_description', headerName: 'Description'},
-  {field: 'content_level', headerName: 'Content Level'},
-  {field: 'waveband', headerName: 'Waveband'},
-  {field: 'created', headerName: 'Created at'},
-  {field: 'updated', headerName: 'Last updated at'},
-  {field: 'access_urls', headerName: 'Access Urls'},
-  {field: 'access_modes', headerName: 'Access Modes'},
-]
+// const columns = [
+//   {field: 'id', headerName: 'ID'},
+//   {field: 'res_title', headerName: 'Title'},
+//   {field: 'res_description', headerName: 'Description'},
+//   {field: 'content_level', headerName: 'Content Level'},
+//   {field: 'waveband', headerName: 'Waveband'},
+//   {field: 'created', headerName: 'Created at'},
+//   {field: 'updated', headerName: 'Last updated at'},
+//   {field: 'access_urls', headerName: 'Access Urls'},
+//   {field: 'access_modes', headerName: 'Access Modes'},
+// ]
 
 function getCols(raw_cols){
   const columns = raw_cols.map((col) => {
     let cap_col = String(col).charAt(0).toUpperCase() + String(col).slice(1);
+    if (String(col) == "url"){
+      return {
+        field: String(col), 
+        headerName: "URL", 
+        renderCell: (params) => <Link href={params.value} target="_blank">{params.value}</Link>
+      }
+    }
     return {field: String(col), headerName: cap_col.replace("_"," ")}
   })
   return columns;
@@ -38,7 +46,19 @@ function VoDataTable(table_obj, height=400, width='100%', pageSize=[3,6]) {
         columns={columns}
         initialState={{ pagination: { paginationModel } }}
         pageSizeOptions={pageSize}
-        sx={{ border: 0 }}
+        sx={{ 
+          border: 0,
+          "& .MuiDataGrid-cell": { // Contenedeor directo del texto
+            whiteSpace: "normal",
+            lineHeight: "normal",
+            height: "unset !important"
+          },
+          "& .MuiDataGrid-row": { // "Fila"
+            // Forced to use important since overriding inline styles
+            maxHeight: "168px !important"
+          }
+
+        }}
         autosizeOnMount
         density="comfortable"
         disableColumnFilter

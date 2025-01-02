@@ -110,7 +110,7 @@
     "id": 1733156028764, 
     "msg_data": 
     { 
-      "last_tool_called": "query_sia", 
+      "last_tool_called": "sia_img", 
       "last_message": "Here is an image of Eta Carinae:", 
       "tool_data": 
       {
