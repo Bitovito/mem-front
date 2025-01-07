@@ -1,4 +1,4 @@
-# Fron-end memoria Vicente Alvarez; Agente con capacidad RAG e interacción con el VO
+# Front-end memoria Vicente Alvarez; Agente con capacidad RAG e interacción con el VO
 
 ## Requisitos:
 - node.js
