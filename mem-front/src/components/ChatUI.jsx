@@ -139,7 +139,7 @@ const SendButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const ChatUI = () => {
-  const [messages, setMessages] = useState(testingData);
+  const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
