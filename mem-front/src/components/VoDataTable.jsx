@@ -31,7 +31,7 @@ function getCols(raw_cols){
   return columns;
 }
 
-const paginationModel = { page: 0, pageSize: 3 };
+const paginationModel = { page: 0, pageSize: 5 };
 
 function VoDataTable(table_obj, height=400, width='100%', pageSize=[3,6]) {  
   var data_table = table_obj.table_obj;

@@ -161,6 +161,7 @@ const ChatUI = () => {
       .then((response) => response.json())
       .then((data) => {
         if(data.status === "error"){
+          setError(data.answer)
           throw new Error('Error from backend: ' + data.answer);
         }
         const newAIMessage = { id: Date.now(), msg_data: data.answer, sender: "assistant"}

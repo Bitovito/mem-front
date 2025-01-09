@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react"
-import Button from '@mui/material/Button';
-import axios from "axios"
 import './App.css'
-import { TextField, Divider, Paper, Stack, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Grid from '@mui/material/Grid2';
 import ChatUI from "../components/ChatUI";
+import AppHelp from "../components/AppHelp"
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 
 const theme = createTheme({
   palette: {
@@ -49,10 +48,18 @@ function App() {
       <Grid container sx={{flexGrow: 1, height: "100%"}}>
         <Grid size={2}>
           <Box sx={{bgcolor: theme.palette.primary.main , height:"100%"}} id="caja">
-            <Box sx={{p: 1}}>
+            <Box sx={{
+              p: 1, 
+              display: "flex",
+              overflow: "auto",
+              maxHeight: "100vh",
+              flexDirection: "column",
+              overflowY: "scroll"
+              }}>
               <Typography variant="h5" align="center" color="white">
                 Agentic Assistant for the Virtual Observatory
               </Typography>
+              <AppHelp />
             </Box>
           </Box>
         </Grid>
