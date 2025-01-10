@@ -46,8 +46,7 @@ export default function AppHelp() {
             responder preguntas varias relacionadas con la astronomía. Es recomendable 
             interactuar y hacer preguntas al asistente para comprender mejor su funcionamiento 
             y como solicitar información.
-            </Typography>
-            <Typography>
+
             Para ver funcionalidades de la aplicación, asi como ejemplos de uso, extienda el parrafo.
           </Typography>
         </AccordionSummary>
